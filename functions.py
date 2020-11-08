@@ -5,4 +5,13 @@ def padding(X, pad):
 
     return output
 
-def conv_
+def conv_single_step(a, W, b):
+    s = np.multiply(a,W) + b
+    output = np.sum(s)
+
+    return output
+
+def conv_forward(a, W, b, params):
+    (m, hight, width, color) = a.shape
+
+    (n, )
