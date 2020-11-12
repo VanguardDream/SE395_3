@@ -4,6 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 
+import torch
+import torchvision
+
 lossgraph = True
 numoflayer = 2
 
@@ -50,14 +53,15 @@ if numoflayer == 2:
         image_train, 
         label_train, 
         batch_size=16, 
-        epochs=10, 
+        epochs=3, 
         validation_data=(image_test, label_test),
         callbacks=[tensorboard_callback]
     )
 
-    # # Print Confusion Matrix
-    # conf_mat = func.confusion(np.argmax(two_layer_model.predict(image_test), axis=-1),data_test)
-    # print(conf_mat)
+    # Print Confusion Matrix
+    print("Confusio Matrix for 2 layer model is ")
+    conf_mat = func.confusion(np.argmax(two_layer_model.predict(image_test), axis=-1),data_test)
+    print(conf_mat)
 
 
 else:
@@ -93,6 +97,11 @@ else:
         callbacks=[tensorboard_callback]
     )
 
+    # Print Confusion Matrix
+    print("Confusio Matrix for 3 layer model is ")
+    conf_mat = func.confusion(np.argmax(three_layer_model.predict(image_test), axis=-1),data_test)
+    print(conf_mat)
+
 
 # Plot Loss Graph
 if lossgraph:
@@ -114,10 +123,24 @@ if lossgraph:
 
     plt.show()
 
-# Tensorboard image upload
-img = np.reshape(image_train[123], (-1, 28, 28, 1))
+# Top Rank image
+if numoflayer == 2:
+    predictions = two_layer_model.predict(image_test)
 
+else:
+    predictions = three_layer_model.predict(image_test)
+
+idices = func.top3image_index(predictions)
+print(idices)
+
+# Tensorboard image upload as each
 file_writer = tf.summary.create_file_writer(log_dir)
 
 with file_writer.as_default():
-    tf.summary.image("Training data", img, step=0)
+    for i in range(0, len(idices)):
+        img = np.reshape(image_train[idices[i]], (-1, 28, 28, 1))
+        tf.summary.image("Top image indices "+ str(i), img, step=0)
+
+# Tensorboard image upload as merged
+file_writer = tf.summary.create_file_writer(log_dir)
+
