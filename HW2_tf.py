@@ -42,6 +42,7 @@ if numoflayer == 2:
         metrics=['accuracy']
     )
 
+    # Tensorboard log directory
     log_dir = "log/two_l/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
@@ -49,10 +50,14 @@ if numoflayer == 2:
         image_train, 
         label_train, 
         batch_size=16, 
-        epochs=1, 
+        epochs=10, 
         validation_data=(image_test, label_test),
         callbacks=[tensorboard_callback]
     )
+
+    # # Print Confusion Matrix
+    # conf_mat = func.confusion(np.argmax(two_layer_model.predict(image_test), axis=-1),data_test)
+    # print(conf_mat)
 
 
 else:
@@ -75,6 +80,7 @@ else:
     metrics=['accuracy']
     )
     
+    # Tensorboard log directory
     log_dir = "log/three_l/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
@@ -82,7 +88,7 @@ else:
         image_train,
         label_train,
         batch_size=16,
-        epochs=4,
+        epochs=10,
         validation_data=(image_test, label_test),
         callbacks=[tensorboard_callback]
     )
