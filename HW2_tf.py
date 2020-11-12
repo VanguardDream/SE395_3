@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 
-import torch
-import torchvision
+# import torch
+# import torchvision
 
 lossgraph = True
-numoflayer = 2
+numoflayer = 3
 
 # Loader
 data_train, data_test = tf.keras.datasets.mnist.load_data()
@@ -53,7 +53,7 @@ if numoflayer == 2:
         image_train, 
         label_train, 
         batch_size=16, 
-        epochs=3, 
+        epochs=10, 
         validation_data=(image_test, label_test),
         callbacks=[tensorboard_callback]
     )
